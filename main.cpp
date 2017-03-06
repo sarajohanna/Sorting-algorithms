@@ -70,12 +70,12 @@ void quickSort(int A[], int start, int n)
         quickSort(A, start, p-1);
         quickSort(A, p, n);
     }
-    
 }
 
 //MERGESORT
-void topDownMerge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
+void merge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
 {
+    //Copy A to B
     for (int k = iBegin; k <= iEnd; ++k)
         B[k] = A[k];
     
@@ -83,6 +83,7 @@ void topDownMerge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
     int curr = iBegin;
     int j = iMiddle+1;
     
+    // While there are elements in both sub arrays
     while(i <= iMiddle && j <= iEnd)
     {
         if (B[j] > B[i])
@@ -91,24 +92,25 @@ void topDownMerge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
             A[curr++] = B[j++];
     }
     
+    // Copy B back to A
     while(i <= iMiddle)
         A[curr++] = B[i++];
 }
 
-void topDownSplitMerge(int A[], int B[], int iBegin, int iEnd)
+void splitMerge(int A[], int B[], int iBegin, int iEnd)
 {
     if(iEnd - iBegin < 2)
         return;
     int iMiddle = (iEnd + iBegin) / 2;
-    topDownSplitMerge(A, B, iBegin, iMiddle); // sort left part
-    topDownSplitMerge(A, B, iMiddle+1, iEnd); // sort right part
-    topDownMerge(A, B, iBegin, iMiddle, iEnd);
+    splitMerge(A, B, iBegin, iMiddle); // sort left part
+    splitMerge(A, B, iMiddle+1, iEnd); // sort right part
+    merge(A, B, iBegin, iMiddle, iEnd);
 }
 
 void mergeSort(int A[], int n)
 {
     int B[n];
-    topDownSplitMerge(A, B, 0, n);
+    splitMerge(A, B, 0, n);
 }
 
 int main(int argc, const char * argv[]) {
