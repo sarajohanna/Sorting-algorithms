@@ -29,8 +29,7 @@ void selectionSort(int A[], int n)
 //QUICKSORT
 int subPartition(int A[], int left, int right)
 {
-    // Randomly pick pivot
-    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned int>(time(0))); // Randomly pick pivot
     int randomNumber = rand();
     int rand = (randomNumber % (right-left)) + left;
     int p = A[rand];
@@ -59,16 +58,14 @@ void quickSort(int A[], int start, int n)
 //MERGESORT
 void merge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
 {
-    //Copy A to B
-    for (int k = iBegin; k <= iEnd; ++k)
+    for (int k = iBegin; k <= iEnd; ++k) //Copy A to B
         B[k] = A[k];
     
     int i = iBegin;
     int curr = iBegin;
     int j = iMiddle+1;
     
-    // While there are elements in both sub arrays
-    while(i <= iMiddle && j <= iEnd)
+    while(i <= iMiddle && j <= iEnd) // While there are elements in both sub arrays
     {
         if (B[j] > B[i])
             A[curr++] = B[i++];
@@ -76,8 +73,7 @@ void merge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
             A[curr++] = B[j++];
     }
     
-    // Copy remaining to A
-    while (i <= iMiddle)
+    while (i <= iMiddle) // Copy remaining to A
         A[curr++] = B[i++];
 }
 
