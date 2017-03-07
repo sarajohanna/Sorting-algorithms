@@ -8,9 +8,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include <array>
-#include <vector>
-#include <iterator>
 
 using namespace std;
 
@@ -22,16 +19,10 @@ void selectionSort(int A[], int n)
         for (int i = j+1; i < n; ++i)
         {
             if (A[i] < A[iMin])
-            {
                 iMin = i;
-            }
         }
         if (iMin != j)
-        {
-            int temp = A[iMin];
-            A[iMin] = A[j];
-            A[j] = temp;
-        }
+            swap(A[iMin], A[j]);
     }
 }
 
@@ -43,22 +34,15 @@ int subPartition(int A[], int left, int right)
     int randomNumber = rand();
     int rand = (randomNumber % (right-left)) + left;
     int p = A[rand];
-    A[rand] = A[left];
-    A[left] = p;
-    
+    swap(A[left], A[rand]);
+ 
     int i = left + 1;
     for (int j = left + 1; j < right; ++j)
     {
         if (A[j] < p)
-        {
-            int temp = A[j];
-            A[j] = A[i];
-            A[i] = temp;
-            ++i;
-        }
+            swap(A[j], A[i++]);
     }
-    A[left] = A[i-1];
-    A[i-1] = p;
+    swap(A[left], A[i-1]);
     return i;
 }
 
@@ -92,14 +76,14 @@ void merge(int A[], int B[], int iBegin, int iMiddle, int iEnd)
             A[curr++] = B[j++];
     }
     
-    // Copy B back to A
-    while(i <= iMiddle)
+    // Copy remaining to A
+    while (i <= iMiddle)
         A[curr++] = B[i++];
 }
 
 void splitMerge(int A[], int B[], int iBegin, int iEnd)
 {
-    if(iEnd - iBegin < 2)
+    if(iBegin >= iEnd)
         return;
     int iMiddle = (iEnd + iBegin) / 2;
     splitMerge(A, B, iBegin, iMiddle); // sort left part
@@ -110,27 +94,61 @@ void splitMerge(int A[], int B[], int iBegin, int iEnd)
 void mergeSort(int A[], int n)
 {
     int B[n];
-    splitMerge(A, B, 0, n);
+    splitMerge(A, B, 0, n-1);
 }
 
 int main(int argc, const char * argv[]) {
     
-    int A[] = {12, 18, 1, 5, 2, 16, 11, 8, 88, 200, 12, 11};
-    int n = 12;
+    int A[] = {12, 18, 1, 5, 2, 16, 10, 8, 88, 200, 13};
+    int n = 11;
     
+    int B[] = {12, 1};
+    int m = 2;
+
+    cout << "Array A to be sorted:" << endl;
     for (int i : A)
         cout << i << endl;
     cout << endl;
     
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
-    quickSort(A, 0, n);
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    cout << "Time: " << elapsed_seconds.count() << "s\n";
+    
+    cout << "Array B to be sorted:" << endl;
+    for (int i : B)
+        cout << i << endl;
     cout << endl;
     
+    cout << "Array A w Selection sort:" << endl;
+    selectionSort(A, n);
     for (int i : A)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array B w Selection sort:" << endl;
+    selectionSort(B, m);
+    for (int i : B)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array A w Quick sort:" << endl;
+    quickSort(A, 0, n);
+    for (int i : A)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array B w Quick sort:" << endl;
+    quickSort(B, 0, m);
+    for (int i : B)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array A w Merge sort:" << endl;
+    mergeSort(A, n);
+    for (int i : A)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array B w Merge sort:" << endl;
+    mergeSort(B, m);
+    for (int i : B)
         cout << i << endl;
     cout << endl;
     
