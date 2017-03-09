@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
 using namespace std;
 
@@ -93,6 +94,60 @@ void mergeSort(int A[], int n)
     splitMerge(A, B, 0, n-1);
 }
 
+//HEAPSORT
+void siftDown(int A[], int start, int end)
+{
+    int leftChild = 2*start+1;
+    int root = start;
+    
+    while (leftChild <= end) // While the root has at least one child
+    {
+        int child = leftChild;
+        int toSwap = root; // Keeps track of child to swap with
+        
+        if (A[toSwap] < A[child]) // Check which child is biggest and set that to "swap"
+            toSwap = child;
+        
+        if ((child+1 <= end)&&(A[toSwap] < A[child+1]))
+            toSwap = child +1;
+        
+        if(toSwap == root)
+            return;
+        else
+        {
+            swap(A[root], A[toSwap]);
+            root = toSwap;
+            leftChild = 2*root+1;
+        }
+    }
+}
+
+void heapify(int A[], int count)
+{
+    int iLastChild = count-1;
+    int iParent = floor((iLastChild-1) / 2);
+    int start = iParent; // Start at parent of last node
+    
+    while (start >= 0)
+    {
+        siftDown(A, start, count-1); // Sift down so that app nodes below start are in heap order
+        --start; // Go to next parent node
+    }
+}
+
+void heapSort(int A[], int count)
+{
+    heapify(A, count); // Create a max heap
+    int end = count - 1;
+    
+    while (end > 0) // A[0:end] is heap and A[end:count] is the sorted array
+    {
+        swap(A[end], A[0]); // A[0] lagest value, swap it in front of sorted elements
+        --end;
+        siftDown(A, 0, end); // Restore heap order
+    }
+}
+
 int main(int argc, const char * argv[]) {
     
     int A[] = {12, 18, 1, 5, 2, 16, 10, 8, 88, 200, 13};
@@ -144,6 +199,18 @@ int main(int argc, const char * argv[]) {
     
     cout << "Array B w Merge sort:" << endl;
     mergeSort(B, m);
+    for (int i : B)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array A w Heap sort:" << endl;
+    heapSort(A, n);
+    for (int i : A)
+        cout << i << endl;
+    cout << endl;
+    
+    cout << "Array B w Heap sort:" << endl;
+    heapSort(B, m);
     for (int i : B)
         cout << i << endl;
     cout << endl;
